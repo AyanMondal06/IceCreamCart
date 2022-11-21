@@ -9,9 +9,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table sorting" id="pages">
     <thead>
-        <tr>
+        <tr class=" home">
             <th>
                 Title
             </th>
@@ -25,7 +25,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr class="@item.Slug" id="id_@item.Id">
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -37,7 +37,7 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 @if(item.Slug!="home"){
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="confirmDeletion" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 }
                 
             </td>
@@ -45,3 +45,19 @@
 }
     </tbody>
 </table>
+@section Scripts {
+    
+        <script>
+
+            $("table#pages tbody").sortable({
+                items:"tr:not(.home)",
+                placeholder:"ui-state-highlight",
+                update:function(){
+                let ids = $("table#pages tbody").sortable("serialize");
+                let url = "/admin/pages/reorder";
+                $.post(url,ids,function(){});
+                }
+
+            })
+        </script>
+}

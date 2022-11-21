@@ -9,7 +9,7 @@
 <h4>Page</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id"/>
@@ -39,4 +39,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        
+        CKEDITOR.replace("Context");
+        //CKEDITOR.replace("Content");
+    </script>
 }

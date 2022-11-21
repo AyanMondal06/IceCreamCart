@@ -79,9 +79,9 @@ namespace IceCreamCart.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Page page)
         {
-            Page toeupdated = await context.Pages.FirstOrDefaultAsync(x=>x.Id == page.Id);
-            toeupdated = page;
-            await context.SaveChangesAsync();
+            //Page toeupdated = await context.Pages.FirstOrDefaultAsync(x=>x.Id == page.Id);
+            //toeupdated = page;
+           // await context.SaveChangesAsync();
             if (ModelState.IsValid)
             {
                 page.Dosomething();
@@ -95,12 +95,46 @@ namespace IceCreamCart.Areas.Admin.Controllers
                     return View(page);
                 }
                 //context.Add(page);
+                context.Update(page);
                 await context.SaveChangesAsync();
                 TempData["Success"] = "The page has been edited";
-                return RedirectToAction("Edit");
+                return RedirectToAction("Edit",new {id=page.Id});
             }
             return View(page);
 
+        }
+        public async Task<ActionResult> Delete(int id)
+        {
+
+            Page page = await context.Pages.FindAsync(id);
+            if (page == null)
+            {
+                TempData["Error"] = "The Page Doesn't Exist";
+            }
+            else
+            {
+                context.Pages.Remove(page);
+                await context.SaveChangesAsync();
+                TempData["Success"] = "The page has been Deleted";
+            }
+            return RedirectToAction("Index");
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reorder(int[] id)
+        {
+            int count = 1;
+            foreach (var pageId in id)
+            {
+                Page page = await context.Pages.FindAsync(pageId);
+                page.Sorting = count;
+                context.Update(page);
+                await context.SaveChangesAsync();
+                count++;
+
+            }
+            return Ok();
         }
 
     }

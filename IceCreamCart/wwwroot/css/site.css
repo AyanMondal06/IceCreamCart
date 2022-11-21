@@ -17,3 +17,11 @@ body {
   margin-bottom: 60px;
 }
 
+table.sorting tr:not(.home) {
+    cursor:pointer;
+}
+
+.ui-state-highlight {
+    border: 1px dashed #ccc;
+}
+
